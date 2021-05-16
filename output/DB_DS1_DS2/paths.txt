@@ -1,0 +1,6 @@
+dataset\DS1\file1.txt
+dataset\DS1\file2.txt
+dataset\DS2\sub1\file_a.txt
+dataset\DS2\sub1\file_b.txt
+dataset\DS2\sub2\file_c.txt
+dataset\DS2\sub2\file_d.txt
