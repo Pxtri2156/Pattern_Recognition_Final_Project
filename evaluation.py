@@ -1,4 +1,9 @@
 '''
+Metric: 
+    + Accuracy
+    + Confusion matrix 
+    + ....
+
 Input: 
     + Name method model
     + Name dataset
@@ -6,7 +11,5 @@ Input:
     + Other 
 
 Output: 
-    + Result in console
-    + Visualize result. 
-
+    + Score each metric
 '''
