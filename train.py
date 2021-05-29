@@ -15,9 +15,9 @@ def load_features(features):
     '''
     return data
     Process:
-        + Choose dataset
+        + Choose dataset 
         + Load features from file 
-        + Return data
+        + Return data   
     '''
     pass
 
@@ -34,7 +34,7 @@ def train():
     # Split data
     # Choose model
     # Training 
-    # Save model 
+    # Save model kl;;l
     pass
 
 def main(args):

@@ -1,17 +1,16 @@
 import librosa  
 import argparse
-
+import numpy as np 
+import sys 
+sys.path.append("./")
+from features_extraction.extract_methods import m_mel_spectogram
 def load_data(root_data, name_data):
     '''
     return data_path 
     '''
     pass
 
-def method1():
-    pass
 
-def method2():
-    pass
 
 def extract_all_features(data):
     '''
@@ -27,13 +26,22 @@ def extract_all_features(data):
     # Return vector 
     pass
 
-def get_features(root_data, data_n):
+def get_feature(path, arguments=False):
     # Generate data path 
     # Load data with librosa
+    data, sample_rate = librosa.load(path, duration=2.5, offset=0.6)
+
     # Argument data
+    if arguments == True:
+        pass 
+
     # Extract default data and argument data 
     # Concante vector with np.vstack()
     # Return result
+
+def get_all_features(root_data, data_n):
+    # Generate data path 
+    # Load data with librosa 
     pass
 
 def save_features(features, output):
@@ -50,6 +58,11 @@ def main(args):
     print(args.type)
     print(args.argu)
     print(args.output)
+    path = 'E:/Courses/Recognition/Final_Project/Dataset\TESS\OAF_angry\OAF_back_angry.wav'
+    data, sample_rate= librosa.load(path, duration=2.5, offset=0.6)
+    m_mel_spectogram(data, sample_rate)
+    # Load data 
+
 
 def args_parser():
 
@@ -69,4 +82,8 @@ def args_parser():
 if __name__ == "__main__":
     args = args_parser()
     main(args)
+
+'''
+ -r E:\Courses\Recognition\Final_Project\Pattern_Recognition_Final_Project\dataset 
+ '''
     
