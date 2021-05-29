@@ -2,6 +2,7 @@ import librosa
 import argparse
 import numpy as np 
 import sys 
+from tqdm import tqdm
 sys.path.append("./")
 from features_extraction.extract_methods import m_mfcc, m_zcr, m_spectral_rolloff, \
                                                 m_chroma_stft, m_rms, m_mel_spectogram, \
@@ -9,6 +10,8 @@ from features_extraction.extract_methods import m_mfcc, m_zcr, m_spectral_rollof
                                                 m_tempogram, m_spectral_contrast, m_spectral_flatness 
 
 from argumentation.argument import noise, stretch, shift, pitch
+
+from data_processing.generate_data_path import *
 
 def load_data(root_data, name_data):
     '''
@@ -28,35 +31,40 @@ def extract_all_features(data, sample_rate):
     # Extract each features(MFCC, F0, .......)
     ## MFCC
     mfcc = m_mfcc(data, sample_rate)
-    # print("shape mfcc: ", mfcc.shape)
+    print("shape mfcc: ", mfcc.shape)
     ## Chroma STFT
     sftf = m_chroma_stft(data, sample_rate)
-    # print("shape stft: ", sftf.shape)
+    print("shape stft: ", sftf.shape)
     ## Zcr
     zcr = m_zcr(data)
-    # print('shape zcr: ', zcr.shape)
+    print('shape zcr: ', zcr.shape)
     ## Spectral Rolloff
     rolloff = m_spectral_rolloff(data, sample_rate)
-    # print('shape rolloff: ', rolloff.shape)
+    print('shape rolloff: ', rolloff.shape)
     ## Mel Spectogram
     mel = m_mel_spectogram(data, sample_rate)
-    # print("shape mel: ", mel.shape)
+    print("shape mel: ", mel.shape)
     ## rms 
     rms = m_rms(data)
-    # print("shape rms: ", rms.shape)
+    print("shape rms: ", rms.shape)
     # cens 
     cens = m_chroma_cens(data, sample_rate)
+    print("cens shape: ", cens.shape)
     # spectral centroid
     centroid = m_chroma_cens(data, sample_rate)
+    print('centroid shape: ', centroid.shape)
     # 
     contrast = m_spectral_contrast(data, sample_rate)
+    print('contrast shape: ', contrast.shape)
     # 
     flatness = m_spectral_flatness(data)
+    print('flatness shape: ', flatness.shape)
     # 
     tempogram = m_tempogram(data, sample_rate)
+    print("tempogram shape: " ,tempogram.shape)
     # Hstack 
-    result = np.hstack((result, mfcc, sftf, zcr, rolloff, mel, rms, cens, centroid,
-                         contrast, flatness, tempogram))
+    result = np.hstack((result, mfcc, sftf, zcr, mel, rms, cens, centroid,
+                          tempogram))
 
     # Return vector 
     return result
@@ -65,28 +73,47 @@ def get_feature(path, argument=False):
     # Generate data path 
     # Load data with librosa
     data, sample_rate = librosa.load(path, duration=2.5, offset=0.6)
+    print("shape data: ", data.shape)
     features = extract_all_features(data, sample_rate)
     # Argument data
     if argument == True:
         print("argumented")
         noise_data = noise(data)
-
-        stretch_data = stretch(data)
-
-        pitch_data = pitch(data)
+        print("noise shape: ", noise_data.shape)
+        noise_features = extract_all_features(noise_data, sample_rate)
+        # stretch_data = stretch(data)
+        pitch_data = pitch(data, sample_rate)
+        print("pitch shape: ", pitch_data.shape)
+        pitch_features = extract_all_features(pitch_data, sample_rate)
 
         shift_data = shift(data)
+        print("shift_data", shift_data.shape)
+        shift_feature = extract_all_features(shift_data, sample_rate)
 
-    # Concante vector with np.vstack()
-    print('features: ', features)
+        # Concante vector with np.vstack()
+        features = np.vstack((features, noise_features, pitch_features , shift_feature))
+    # print('features: ', features)
     print("shape of features: ", features.shape)
     # Return result
     return features
 
-def get_all_features(root_data, data_n ):
+def get_all_features(root_data, data_n, argument=True ):
     # Generate data path 
+    path_lst, label_lst = generate_data_path(root_data, data_n)
     # Load data with librosa 
-    pass
+    all_features = np.array([])
+    dem = 0
+    for i in tqdm(range(len(path_lst))):
+        print("Processing: ", path_lst[i])
+        if dem > 5:
+            break
+        dem += 1
+        feature = get_feature(path_lst[i], argument)
+        if i != 0:
+
+            all_features = np.vstack((all_features, feature))
+        else:
+            all_features = feature
 
 def save_features(features, output):
     '''
@@ -102,8 +129,9 @@ def main(args):
     print(args.type)
     print(args.argu)
     print(args.output)
+    print(args.data_n)
     path = 'E:/Courses/Recognition/Final_Project/Dataset\TESS\OAF_angry\OAF_back_angry.wav'
-    featues = get_feature(path)
+    all_featues = get_all_features(args.root, args.data_n)
     # Load data 
 
 
