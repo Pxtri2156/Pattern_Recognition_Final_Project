@@ -3,7 +3,13 @@ import argparse
 import numpy as np 
 import sys 
 sys.path.append("./")
-from features_extraction.extract_methods import m_mel_spectogram
+from features_extraction.extract_methods import m_mfcc, m_zcr, m_spectral_rolloff, \
+                                                m_chroma_stft, m_rms, m_mel_spectogram, \
+                                                m_chroma_cens, m_spectral_centroid, m_spectral_bandwidth, \
+                                                m_tempogram, m_spectral_contrast, m_spectral_flatness 
+
+from argumentation.argument import noise, stretch, shift, pitch
+
 def load_data(root_data, name_data):
     '''
     return data_path 
@@ -12,34 +18,72 @@ def load_data(root_data, name_data):
 
 
 
-def extract_all_features(data):
+def extract_all_features(data, sample_rate):
     '''
     Return: Features vector 
     '''
     # Get data
-    # Extract each features(MFCC, F0, .......)
-        ## Method 1
-        ## Method 2
-        ## .......
-        ## Method n
-    # Concante vector with np.hstack()
-    # Return vector 
-    pass
+    result = np.array([])
 
-def get_feature(path, arguments=False):
+    # Extract each features(MFCC, F0, .......)
+    ## MFCC
+    mfcc = m_mfcc(data, sample_rate)
+    # print("shape mfcc: ", mfcc.shape)
+    ## Chroma STFT
+    sftf = m_chroma_stft(data, sample_rate)
+    # print("shape stft: ", sftf.shape)
+    ## Zcr
+    zcr = m_zcr(data)
+    # print('shape zcr: ', zcr.shape)
+    ## Spectral Rolloff
+    rolloff = m_spectral_rolloff(data, sample_rate)
+    # print('shape rolloff: ', rolloff.shape)
+    ## Mel Spectogram
+    mel = m_mel_spectogram(data, sample_rate)
+    # print("shape mel: ", mel.shape)
+    ## rms 
+    rms = m_rms(data)
+    # print("shape rms: ", rms.shape)
+    # cens 
+    cens = m_chroma_cens(data, sample_rate)
+    # spectral centroid
+    centroid = m_chroma_cens(data, sample_rate)
+    # 
+    contrast = m_spectral_contrast(data, sample_rate)
+    # 
+    flatness = m_spectral_flatness(data)
+    # 
+    tempogram = m_tempogram(data, sample_rate)
+    # Hstack 
+    result = np.hstack((result, mfcc, sftf, zcr, rolloff, mel, rms, cens, centroid,
+                         contrast, flatness, tempogram))
+
+    # Return vector 
+    return result
+
+def get_feature(path, argument=False):
     # Generate data path 
     # Load data with librosa
     data, sample_rate = librosa.load(path, duration=2.5, offset=0.6)
-
+    features = extract_all_features(data, sample_rate)
     # Argument data
-    if arguments == True:
-        pass 
+    if argument == True:
+        print("argumented")
+        noise_data = noise(data)
 
-    # Extract default data and argument data 
+        stretch_data = stretch(data)
+
+        pitch_data = pitch(data)
+
+        shift_data = shift(data)
+
     # Concante vector with np.vstack()
+    print('features: ', features)
+    print("shape of features: ", features.shape)
     # Return result
+    return features
 
-def get_all_features(root_data, data_n):
+def get_all_features(root_data, data_n ):
     # Generate data path 
     # Load data with librosa 
     pass
@@ -59,8 +103,7 @@ def main(args):
     print(args.argu)
     print(args.output)
     path = 'E:/Courses/Recognition/Final_Project/Dataset\TESS\OAF_angry\OAF_back_angry.wav'
-    data, sample_rate= librosa.load(path, duration=2.5, offset=0.6)
-    m_mel_spectogram(data, sample_rate)
+    featues = get_feature(path)
     # Load data 
 
 
