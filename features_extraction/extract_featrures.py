@@ -97,7 +97,7 @@ def get_feature(path, argument=False):
     # Return result
     return features
 
-def get_all_features(root_data, data_n, argument=True ):
+def get_all_features(root_data, data_n, argument=False):
     # Generate data path 
     path_lst, label_lst = generate_data_path(root_data, data_n)
     # Load data with librosa 
@@ -120,14 +120,27 @@ def get_all_features(root_data, data_n, argument=True ):
     print('features shape: ', all_features.shape)
     return all_features, label_lst
 
-def save_features(features, output):
+def save_features(features, label_lst, output,data_n):
     '''
     Parameter: 
         + features: vector of features 
         + output: the save path 
     Result: save Features vector into file
     '''
-    pass
+    save_path = os.path.join(output,data_n)
+    if not  os.path.isdir(save_path):
+        os.mkdir(save_path)
+        print("Created ", save_path)
+
+    feature_path = os.path.join(save_path, 'features.npz')
+    label_path = os.path.join(save_path, 'label.txt')
+    label_file = open(label_path, 'w')
+
+    np.savez_compressed(feature_path, features )
+    print("Saved all of the features")
+    for label in label_lst:
+         label_file.write("%s\n" % label)   
+    print("Saved all of the labels")
 
 def main(args):
     print(args.root)
@@ -136,7 +149,8 @@ def main(args):
     print(args.output)
     print(args.data_n)
     path = 'E:/Courses/Recognition/Final_Project/Dataset\TESS\OAF_angry\OAF_back_angry.wav'
-    all_featues = get_all_features(args.root, args.data_n)
+    all_featues, label_lst = get_all_features(args.root, args.data_n, args.argu)
+    save_features(all_featues, label_lst, args.output, args.data_n)
     # Load data 
 
 
@@ -160,6 +174,7 @@ if __name__ == "__main__":
     main(args)
 
 '''
- -r E:/Courses/Recognition/Final_Project/Dataset
+ -r E:/Courses/Recognition/Final_Project/Dataset  -n TESS  -o E:/Courses/Recognition/Final_Project/Pattern_Recognition_Final_Project/feature_data  -a 
+   
  '''
     
