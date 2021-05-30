@@ -31,37 +31,37 @@ def extract_all_features(data, sample_rate):
     # Extract each features(MFCC, F0, .......)
     ## MFCC
     mfcc = m_mfcc(data, sample_rate)
-    print("shape mfcc: ", mfcc.shape)
+    # print("shape mfcc: ", mfcc.shape)
     ## Chroma STFT
     sftf = m_chroma_stft(data, sample_rate)
-    print("shape stft: ", sftf.shape)
+    # print("shape stft: ", sftf.shape)
     ## Zcr
     zcr = m_zcr(data)
-    print('shape zcr: ', zcr.shape)
+    # print('shape zcr: ', zcr.shape)
     ## Spectral Rolloff
     rolloff = m_spectral_rolloff(data, sample_rate)
-    print('shape rolloff: ', rolloff.shape)
+    # print('shape rolloff: ', rolloff.shape)
     ## Mel Spectogram
     mel = m_mel_spectogram(data, sample_rate)
-    print("shape mel: ", mel.shape)
+    # print("shape mel: ", mel.shape)
     ## rms 
     rms = m_rms(data)
-    print("shape rms: ", rms.shape)
+    # print("shape rms: ", rms.shape)
     # cens 
     cens = m_chroma_cens(data, sample_rate)
-    print("cens shape: ", cens.shape)
+    # print("cens shape: ", cens.shape) 
     # spectral centroid
     centroid = m_chroma_cens(data, sample_rate)
-    print('centroid shape: ', centroid.shape)
+    # print('centroid shape: ', centroid.shape)
     # 
     contrast = m_spectral_contrast(data, sample_rate)
-    print('contrast shape: ', contrast.shape)
+    # print('contrast shape: ', contrast.shape)
     # 
     flatness = m_spectral_flatness(data)
-    print('flatness shape: ', flatness.shape)
+    # print('flatness shape: ', flatness.shape)
     # 
     tempogram = m_tempogram(data, sample_rate)
-    print("tempogram shape: " ,tempogram.shape)
+    # print("tempogram shape: " ,tempogram.shape)
     # Hstack 
     result = np.hstack((result, mfcc, sftf, zcr, mel, rms, cens, centroid,
                           tempogram))
@@ -77,17 +77,17 @@ def get_feature(path, argument=False):
     features = extract_all_features(data, sample_rate)
     # Argument data
     if argument == True:
-        print("argumented")
+        print("argumented: Noise, Pitch, Shift")
         noise_data = noise(data)
-        print("noise shape: ", noise_data.shape)
+        # print("noise shape: ", noise_data.shape)
         noise_features = extract_all_features(noise_data, sample_rate)
         # stretch_data = stretch(data)
         pitch_data = pitch(data, sample_rate)
-        print("pitch shape: ", pitch_data.shape)
+        # print("pitch shape: ", pitch_data.shape)
         pitch_features = extract_all_features(pitch_data, sample_rate)
 
         shift_data = shift(data)
-        print("shift_data", shift_data.shape)
+        # print("shift_data", shift_data.shape)
         shift_feature = extract_all_features(shift_data, sample_rate)
 
         # Concante vector with np.vstack()
@@ -101,6 +101,9 @@ def get_all_features(root_data, data_n, argument=True ):
     # Generate data path 
     path_lst, label_lst = generate_data_path(root_data, data_n)
     # Load data with librosa 
+    # 
+    if argument == True:
+        label_lst = np.repeat(label_lst,4)
     all_features = np.array([])
     dem = 0
     for i in tqdm(range(len(path_lst))):
@@ -114,6 +117,8 @@ def get_all_features(root_data, data_n, argument=True ):
             all_features = np.vstack((all_features, feature))
         else:
             all_features = feature
+    print('features shape: ', all_features.shape)
+    return all_features, label_lst
 
 def save_features(features, output):
     '''
@@ -155,6 +160,6 @@ if __name__ == "__main__":
     main(args)
 
 '''
- -r E:\Courses\Recognition\Final_Project\Pattern_Recognition_Final_Project\dataset 
+ -r E:/Courses/Recognition/Final_Project/Dataset
  '''
     
