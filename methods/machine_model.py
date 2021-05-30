@@ -1,6 +1,13 @@
+import librosa  
+import argparse
+import numpy as np 
+import sys 
+from tqdm import tqdm
+sys.path.append("./")
 
+from sklearn.neighbors import KNeighborsClassifier
 
-class KNN():
+class KNN(KNeighborsClassifier):
     def __init__():
         pass
     def train(X, Y):

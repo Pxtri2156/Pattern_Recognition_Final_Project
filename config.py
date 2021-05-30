@@ -1,2 +1,3 @@
 TYPE_DS1 = [""]
 TYPE_DS2 = ["TESS, RAVDESS"]
+SPLIT_RATIO = 0.2
