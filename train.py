@@ -34,33 +34,8 @@ if not sys.warnoptions:
     warnings.simplefilter("ignore")
 warnings.filterwarnings("ignore", category=DeprecationWarning) 
 from methods.deep_model import example_deep
-
-def load_features(feature_root, data_n):
-    '''
-    return data
-    Process:
-        + Choose dataset 
-        + Load features from file 
-        + Return data   
-    '''
-    folder_path = os.path.join(feature_root, data_n)
-    if not os.path.isdir(folder_path):
-        print("Wrong dataset name !!!!")
-    else:
-        feature_path = os.path.join(folder_path, 'features.npz')
-        label_path = os.path.join(folder_path, 'label.txt')
-        # Load features
-        dict_data = np.load(feature_path)
-        features = dict_data['arr_0']
-        # Load label 
-        label_f = open(label_path, 'r')
-        labels = label_f.readlines()
-        labels = [label.strip('\n') for label in labels] 
-        label_f.close()   
-
-        return features, labels        
-
-        
+     
+     
 def choose_model(name, cls_n,  *args):
     model = None
     if name == "KNN":
