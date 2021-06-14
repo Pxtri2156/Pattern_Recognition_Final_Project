@@ -26,6 +26,8 @@ def load_features_labels(feature_root, data_n):
 
         return features, labels   
 
+
+
 def main():
     # Test function is here
     pass

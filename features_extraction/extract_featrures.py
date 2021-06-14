@@ -69,7 +69,7 @@ def extract_all_features(data, sample_rate):
     # Return vector 
     return result
 
-def get_feature(path, argument=False):
+def get_feature_from_single_path(path, argument=False):
     # Generate data path 
     # Load data with librosa
     data, sample_rate = librosa.load(path, duration=2.5, offset=0.6)
@@ -97,26 +97,31 @@ def get_feature(path, argument=False):
     # Return result
     return features
 
+def get_features_from_multi_paths(paths, argument=False):
+    all_features = np.array([])
+    dem = 0
+    for i in tqdm(range(len(paths))):
+        print("Processing: ", paths[i])
+        if dem > 5:
+            break
+        dem += 1
+        feature = get_feature_from_single_path(paths[i], argument)
+        if i != 0:
+            all_features = np.vstack((all_features, feature))
+        else:
+            all_features = feature
+    return all_features
+
 def get_all_features(root_data, data_n, argument=False):
     # Generate data path 
     path_lst, label_lst = generate_data_path(root_data, data_n)
     # Load data with librosa 
-    # 
+    # Get labels
     if argument == True:
         label_lst = np.repeat(label_lst,4)
-    all_features = np.array([])
-    dem = 0
-    for i in tqdm(range(len(path_lst))):
-        print("Processing: ", path_lst[i])
-        if dem > 5:
-            break
-        dem += 1
-        feature = get_feature(path_lst[i], argument)
-        if i != 0:
 
-            all_features = np.vstack((all_features, feature))
-        else:
-            all_features = feature
+    # Get features from paths list
+    all_features = get_features_from_multi_paths(path_lst, argument)
     print('features shape: ', all_features.shape)
     return all_features, label_lst
 
