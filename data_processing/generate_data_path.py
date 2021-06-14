@@ -1,8 +1,9 @@
 import os
 import argparse
-
+import numpy as np
 from tqdm import tqdm
 import sys 
+import glob
 sys.path.append("./")
 # from config import TYPE_DS1, TYPE_DS2
 
@@ -35,6 +36,43 @@ def generate_tess(data_path):
     print("Done DS2")
     return path_lst, emotion_lst
 
+def generate_meld(data_path):
+    print("\tProcessing dataset MELD")
+    path_lst = []
+    emotion_lst = []
+    for file in tqdm(os.listdir(data_path)):
+        file_path = os.path.join(data_path, file)
+        print("file path: ", file_path)
+        path_lst.append(file_path)
+
+        emotion = file.split(".")[0].split("_")[-1]
+        emotion_lst.append(emotion)
+    print("Done")
+    return path_lst, emotion_lst
+
+def generate_iemocap(npy_path):
+    print("Preprocessing IEMOCAP")
+    path_lst = []
+    emotion_lst = []
+    npy_lst = glob.glob(npy_path + "/*.npy")
+    for folder_path in npy_lst:
+        data = np.load(folder_path)
+        for fi_path in data:
+            path_lst.append(fi_path)
+            emotion_lst.append(fi_path.split('.')[0].split("_")[-1])
+    return path_lst, emotion_lst
+
+def generate_urdu(npy_path):
+    print("Processing URDU")
+    path_lst = []
+    emotion_lst = []
+    npy_lst = glob.glob(npy_path + "/*.npy")
+    for folder_path in npy_lst:
+        data = np.load(folder_path)
+        for fi_path in data:
+            path_lst.append(fi_path)
+            emotion_lst.append(fi_path.split('/')[3])
+    return path_lst, emotion_lst
 
 def generate_data_path(root_path, nameDB):
 
@@ -47,8 +85,14 @@ def generate_data_path(root_path, nameDB):
         path_lst, emotion_lst = generate_ravdess(path_data)
     elif nameDB == "TESS" :
         path_lst, emotion_lst = generate_tess(path_data)
+    elif nameDB == "MELD":
+        path_lst, emotion_lst = generate_meld(path_data)
+    elif nameDB == "IEMOCAP":
+        path_lst, emotion_lst = generate_iemocap(path_data)
+    elif nameDB == "URDU":
+        path_lst, emotion_lst = generate_urdu(path_data)
     else:
-        print("Wrong name dataset !!!")
+       assert(False),"Wrong name dataset !!!"
 
     return path_lst, emotion_lst
 
@@ -112,9 +156,9 @@ def main(args):
     print(args.root)
     print(args.output)
     # all_path_lst, all_emotion_lst =  generate_all_ds(args.root)
-    all_path_lst, all_emotion_lst  = generate_data_path(args.root, "TESS")
-    # print("all path list: ", all_path_lst)
-    # print("all emotion list: ", all_emotion_lst)
+    all_path_lst, all_emotion_lst  = generate_data_path(args.root, args.nameDB)
+    print("all path list: ", all_path_lst[:10])
+    print("all emotion list: ", all_emotion_lst[:10])
     if args.output != "Null":
         write_result(args.output, "TESS", all_path_lst, all_emotion_lst)
 
@@ -122,6 +166,8 @@ def arg_parser():
     parser = argparse.ArgumentParser(description='Argument of generate data path')
     parser.add_argument('--root', '-r', required=True, 
                         type=str, help='The path consists all datasets')
+    parser.add_argument('--nameDB', '-n', required=True, 
+                        type=str, help='Name of datasets ')
     parser.add_argument('--output', '-o', default = "Null", 
                         type=str, help='The path save path list and emotion list')
 
@@ -130,4 +176,4 @@ def arg_parser():
 if __name__ == "__main__":
     args = arg_parser()
     main(args)
-"-r E:/Courses/Recognition/Final_Project/Dataset -o ./output"
+"-r E:\Courses\Recognition\Final_Project\Pattern_Recognition_Final_Project\datasets -n MELD"
