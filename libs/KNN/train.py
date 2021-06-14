@@ -2,35 +2,45 @@ import os
 import librosa                                                                                                                                                                                                                                                                                                                                                             
 import argparse
 import numpy as np 
-import sys 
+import sys
+import joblib
 from tqdm import tqdm
 
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn import svm
 from sklearn import preprocessing
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import classification_report
+
 import warnings
 sys.path.append("./")
 from utils.loading import load_features_labels
 from utils.config_parse import get_config
 
+def evaluate_model(y_true, y_pred, tar_names):
+
+    cls_report = classification_report(y_true, y_pred, target_names=tar_names )
+    print("{} RESULT EVALUATION {} \n {}".format('_'*30, "_"*30, cls_report ))
+
 
 def train(args, cfgs):
 
     # Load feature data
-    print("[INFO]: Step 1/6 - Loading features and labels]")
+    print("[INFO]: Step 1/7 - Loading features and labels]")
     features, labels = load_features_labels(args.root, args.data_n)
     # print('features: ', features)
     # print("labels: ", labels)
-    print("[INFO]: Step 2/6 - Preprocessing labels]")
+    print("[INFO]: Step 2/7 - Preprocessing labels]")
     print('features shape: ', features.shape) 
     le = preprocessing.LabelEncoder()
     labels = le.fit_transform(labels)
     cls_n = le.classes_
+    print("class: ", cls_n)
     labels = labels[:24]
     print('len of labels: ', len(labels))
     # Split data 
-    print("[INFO]: Step 3/6 - Split data with train - test : {}-{}".format('#'*3, 1- cfg.KNN.SPLIT, cfg.KNN.SPLIT ))
+    print("[INFO]: Step 3/7 - Split data with train - val : {}-{}".format( 1- cfgs.KNN.SPLIT, cfgs.KNN.SPLIT ))
     X_train , X_val, Y_train, Y_val = train_test_split(features, labels, test_size= cfgs.KNN.SPLIT, shuffle=True)
     print("X train shape: ", X_train.shape)
     print('X val shape: ', X_val.shape) 
@@ -38,17 +48,25 @@ def train(args, cfgs):
     print("Y train shape: ", len(Y_train))
     print("Y val: " , len(Y_val))
     # Define model
-    print("[INFO]: Step 4/6 Define model KNeighborsClassifier ")
+    print("[INFO]: Step 4/7 Define model KNeighborsClassifier ")
     model = KNeighborsClassifier(n_neighbors = cfgs.KNN.K )
     # Training
-    print("[INFO]: Step 5/6 Training ")
+    print("[INFO]: Step 5/7 - Training ")
     model.fit(X_train , Y_train )
     print("[INFO]: Completed training")
-    print("Test on validation set")
+    print("[INFO]: Step 6/7 - Evaluation on validation set")
     predicted = model.predict(X_val)
-    print("predicted: ", le.inverse_transform(predicted))
-    # Save model kl;;l
-    print("[INFO]: 6/6 Saving model")
+    # Y_val = [1, 2, 7, 3, 0,4,5, 6,6]
+    # predicted = [0, 0 ,0 ,0, 0, 0, 0, 1,2]
+    print('Y val: ', Y_val)
+    print("predicted: ", predicted)
+    # evaluate_model(Y_val, predicted, cls_n)
+    # print("predicted: ", le.inverse_transform(predicted))
+    # Save model
+    print("[INFO]: 6/6 - Saving model")
+    save_path = os.path.join( args.output, 'model.pkl')
+    joblib.dump(model, save_path)
+
 
 def main(args, cfgs):
 
@@ -81,21 +99,26 @@ def print_args_cfg(args, cfgs):
     print("{} The path of configs file : \n\t{}".format('#'*3, args.configs_file))
 
     print("{} CONFIGS {}".format('_'*30, "_"*30))
-    print("{} Split dataset train - test : {}-{}".format('#'*3, 1- cfg.KNN.SPLIT, cfg.KNN.SPLIT ))
+    print("{} Split dataset train - val : {}-{}".format('#'*3, 1- cfgs.KNN.SPLIT, cfgs.KNN.SPLIT ))
     print("{} Number neighbor: {}".format('#'*3, cfgs.KNN.K))
     print("{}\n".format('_'*100))
 
 
 if __name__ == "__main__":
     args = arg_parser()
-    cfg = get_config()
-    cfg.merge_from_file('./configs/BASE/Base.yaml')
+    cfgs = get_config()
+    cfgs.merge_from_file('./configs/BASE/Base.yaml')
     if not os.path.isfile(args.configs_file):
         print("File configs not exits!!")
-    cfg.merge_from_file(args.configs_file)
-    print_args_cfg(args, cfg)
-    main(args, cfg)
+    cfgs.merge_from_file(args.configs_file)
+    print_args_cfg(args, cfgs)
+    main(args, cfgs)
 
 '''
--r E:\Courses\Recognition\Final_Project\Pattern_Recognition_Final_Project\feature_data -n TESS -o tri   -c E:\Courses\Recognition\Final_Project\Pattern_Recognition_Final_Project\configs\KNN\KNN.yaml
+    -r E:\Courses\Recognition\Final_Project\Pattern_Recognition_Final_Project\feature_data \
+    -n TESS \
+    -o E:\Courses\Recognition\Final_Project\Pattern_Recognition_Final_Project\libs\KNN  \
+    -c E:\Courses\Recognition\Final_Project\Pattern_Recognition_Final_Project\configs\KNN\KNN.yaml
+
+-r E:\Courses\Recognition\Final_Project\Pattern_Recognition_Final_Project\feature_data -n TESS -o E:\Courses\Recognition\Final_Project\Pattern_Recognition_Final_Project\models\KNN  -c E:\Courses\Recognition\Final_Project\Pattern_Recognition_Final_Project\configs\KNN\KNN.yaml
 '''
