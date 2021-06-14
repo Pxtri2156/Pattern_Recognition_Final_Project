@@ -99,13 +99,17 @@ def get_feature_from_single_path(path, argument=False):
 
 def get_features_from_multi_paths(paths, argument=False):
     all_features = np.array([])
-    dem = 0
+    # dem = 0
     for i in tqdm(range(len(paths))):
         print("Processing: ", paths[i])
-        if dem > 5:
-            break
-        dem += 1
-        feature = get_feature_from_single_path(paths[i], argument)
+        # if dem > 5:
+        #     break
+        # dem += 1
+        try:
+          feature = get_feature_from_single_path(paths[i], argument)
+        except:
+          print("Pass")
+          continue
         if i != 0:
             all_features = np.vstack((all_features, feature))
         else:
@@ -122,7 +126,7 @@ def get_all_features(root_data, data_n, argument=False):
 
     # Get features from paths list
     all_features = get_features_from_multi_paths(path_lst, argument)
-    print('features shape: ', all_features.shape)
+    print('all features shape: ', all_features.shape)
     return all_features, label_lst
 
 def save_features(features, label_lst, output,data_n):
