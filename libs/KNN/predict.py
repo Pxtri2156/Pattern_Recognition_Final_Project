@@ -31,7 +31,7 @@ def predict(args, cfgs):
     print("[INFO]: Preparing data")
     paths = glob.glob(args.in_audios +  "/*.wav")
     print("[INFO]: Exacting data")
-    features = get_features_from_multi_paths(paths)
+    features, _ = get_features_from_multi_paths(paths)
     print("[INFO]: Loading model")
     model_path = os.path.join(args.model)
     model = joblib.load(model_path)

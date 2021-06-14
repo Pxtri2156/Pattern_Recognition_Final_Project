@@ -100,21 +100,38 @@ def get_feature_from_single_path(path, argument=False):
 def get_features_from_multi_paths(paths, argument=False):
     all_features = np.array([])
     # dem = 0
+    errors_index = []
     for i in tqdm(range(len(paths))):
         print("Processing: ", paths[i])
         # if dem > 5:
         #     break
         # dem += 1
+        
         try:
           feature = get_feature_from_single_path(paths[i], argument)
         except:
-          print("Pass")
+          errors_index.append(i)
           continue
         if i != 0:
             all_features = np.vstack((all_features, feature))
         else:
             all_features = feature
-    return all_features
+    return all_features, errors_index
+
+def filter_wrong_features(errors_index, label_lst, argument=False):
+    label_lst = np.array(label_lst)
+    index_remove = []
+    if argument == True:
+        for i in errors_index:
+            index_remove  += [i*4 + k for k in range(4)]
+    else:
+        index_remove = errors_index
+    print("index remove: ", index_remove)
+    label_lst = np.delete(label_lst, index_remove)
+    
+    return label_lst 
+
+
 
 def get_all_features(root_data, data_n, argument=False):
     # Generate data path 
@@ -125,8 +142,10 @@ def get_all_features(root_data, data_n, argument=False):
         label_lst = np.repeat(label_lst,4)
 
     # Get features from paths list
-    all_features = get_features_from_multi_paths(path_lst, argument)
+    all_features, errors_index = get_features_from_multi_paths(path_lst, argument)
+    label_lst = filter_wrong_features(errors_index,label_lst, argument )
     print('all features shape: ', all_features.shape)
+    print("all label_lst shape: ", len(label_lst))
     return all_features, label_lst
 
 def save_features(features, label_lst, output,data_n):
