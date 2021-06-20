@@ -36,6 +36,23 @@ def generate_tess(data_path):
     print("Done DS2")
     return path_lst, emotion_lst
 
+def generate_savee(data_path):
+    pass
+
+def generate_crem(data_path):
+    print("\tProcessing dataset CREM")
+    path_lst = []
+    emotion_lst = []
+    for file in tqdm(os.listdir(data_path)):
+        file_path = os.path.join(data_path, file)
+        print("file path: ", file_path)
+        path_lst.append(file_path)
+
+        emotion = file.split(".")[0].split("_")[-2]
+        emotion_lst.append(emotion)
+    print("Done")
+    return path_lst, emotion_lst
+
 def generate_meld(data_path):
     print("\tProcessing dataset MELD")
     path_lst = []
@@ -91,6 +108,8 @@ def generate_data_path(root_path, nameDB):
         path_lst, emotion_lst = generate_iemocap(path_data)
     elif nameDB == "URDU":
         path_lst, emotion_lst = generate_urdu(path_data)
+    elif nameDB == "CREM":
+        path_lst, emotion_lst = generate_crem(path_data)
     else:
        assert(False),"Wrong name dataset !!!"
 
@@ -176,4 +195,4 @@ def arg_parser():
 if __name__ == "__main__":
     args = arg_parser()
     main(args)
-"-r E:\Courses\Recognition\Final_Project\Pattern_Recognition_Final_Project\datasets -n MELD"
+"-r E:\Courses\Recognition\Final_Project\Pattern_Recognition_Final_Project\datasets -n CREM"
