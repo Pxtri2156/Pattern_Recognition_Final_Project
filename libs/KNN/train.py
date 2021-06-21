@@ -19,14 +19,14 @@ from utils.loading import load_features_labels
 from utils.config_parse import get_config
 from utils.write_log import write_config_args_2_log
 from utils.setup_log import setup_logging
-
 import logging
-logger = setup_logging("E:\Courses\Recognition\Final_Project\Pattern_Recognition_Final_Project\libs\KNN\mylog.log")
-logger.disabled = False
+
+
 def evaluate_model(y_true, y_pred, tar_names):
 
     cls_report = classification_report(y_true, y_pred, target_names=tar_names )
     print("{} RESULT EVALUATION {} \n {}".format('_'*30, "_"*30, cls_report ))
+    logger.info("{} RESULT EVALUATION {} \n {}".format('_'*30, "_"*30, cls_report ))
 
 
 def train(args, cfgs):
@@ -83,6 +83,9 @@ def train(args, cfgs):
 
 
 def main(args, cfgs):
+    global logger 
+    logger = setup_logging(os.path.join(args.output, 'log.log'))
+    logger.disabled = False;
     write_config_args_2_log(cfgs, args, logger)
     train(args, cfgs)
 
@@ -124,9 +127,15 @@ if __name__ == "__main__":
     cfgs.merge_from_file('./configs/BASE/Base.yaml')
     if not os.path.isfile(args.configs_file):
         print("File configs not exits!!")
+    # old_stdout = sys.stdout
+    # log_file = open(os.path.join(args.output, 'log.log'),"w")
+    # sys.stdout = log_file
     cfgs.merge_from_file(args.configs_file)
     print_args_cfg(args, cfgs)
     main(args, cfgs)
+    # sys.stdout = old_stdout
+
+    # log_file.close()
 
 '''
     -r E:\Courses\Recognition\Final_Project\Pattern_Recognition_Final_Project\feature_data \
