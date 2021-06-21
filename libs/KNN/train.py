@@ -42,7 +42,7 @@ def train(args, cfgs):
     train_labels = le.fit_transform(train_labels)
     cls_n = le.classes_
     print("class: ", cls_n)
-    train_labels = train_labels[:24] # Must to comment
+    # train_labels = train_labels[:24] # Must to comment
     print('len of train labels: ', len(train_labels))
     # Split data 
     print("[INFO]: Step 3/7 Split data ")
