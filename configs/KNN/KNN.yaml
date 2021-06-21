@@ -1,6 +1,6 @@
 KNN:
   SPLIT: 0.2 # It is mean train:test 8:2
-  K: 5 # n_neighbors
+  K: 6 # n_neighbors
   WEIGHT: 'uniform' # {‘uniform’, ‘distance’} 
   ALR: 'auto' # Algorithm used to compute the nearest neighbors ( ‘auto’, ‘ball_tree’, ‘kd_tree’, ‘brute’)
   
