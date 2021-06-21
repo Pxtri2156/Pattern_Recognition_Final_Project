@@ -1,0 +1,22 @@
+ARGUMENT 
+### The path root of exacted features: E:\Courses\Recognition\Final_Project\Pattern_Recognition_Final_Project\feature_data
+### Dataset name to train: TESS
+### The methods exacted feature: all
+### Augment data: False
+### Dataset name to train: TESS
+### The path of model ouput : E:\Courses\Recognition\Final_Project\Pattern_Recognition_Final_Project\models\KNN
+### The path of configs file : E:\Courses\Recognition\Final_Project\Pattern_Recognition_Final_Project\configs\KNN\KNN.yaml
+ CONFIGS 
+### Split dataset train - val : 0.8-0.2
+### Number neighbor: 5
+ARGUMENT 
+### The path root of exacted features: E:\Courses\Recognition\Final_Project\Pattern_Recognition_Final_Project\feature_data
+### Dataset name to train: TESS
+### The methods exacted feature: all
+### Augment data: False
+### Dataset name to train: TESS
+### The path of model ouput : E:\Courses\Recognition\Final_Project\Pattern_Recognition_Final_Project\models\KNN
+### The path of configs file : E:\Courses\Recognition\Final_Project\Pattern_Recognition_Final_Project\configs\KNN\KNN.yaml
+ CONFIGS 
+### Split dataset train - val : 0.8-0.2
+### Number neighbor: 5
