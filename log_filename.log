@@ -1,0 +1,12 @@
+2021-06-21 10:06:58,973 - INFO - ARGUMENT 
+2021-06-21 10:06:58,974 - INFO - ### The path root of exacted features: E:\Courses\Recognition\Final_Project\Pattern_Recognition_Final_Project\feature_data
+2021-06-21 10:06:58,974 - INFO - ### Dataset name to train: TESS
+2021-06-21 10:06:58,974 - INFO - ### The methods exacted feature: all
+2021-06-21 10:06:58,974 - INFO - ### Augment data: False
+2021-06-21 10:06:58,974 - INFO - ### Dataset name to train: TESS
+2021-06-21 10:06:58,974 - INFO - ### The path of model ouput : E:\Courses\Recognition\Final_Project\Pattern_Recognition_Final_Project\models\KNN
+2021-06-21 10:06:58,974 - INFO - ### The path of configs file : E:\Courses\Recognition\Final_Project\Pattern_Recognition_Final_Project\configs\KNN\KNN.yaml
+2021-06-21 10:06:58,974 - INFO -  CONFIGS 
+2021-06-21 10:06:58,975 - INFO - ### Split dataset train - val : 0.8-0.2
+2021-06-21 10:06:58,975 - INFO - ### Number neighbor: 5
+2021-06-21 10:06:59,013 - INFO - Model was trained

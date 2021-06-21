@@ -17,7 +17,12 @@ import warnings
 sys.path.append("./")
 from utils.loading import load_features_labels
 from utils.config_parse import get_config
+from utils.write_log import write_config_args_2_log
+from utils.setup_log import setup_logging
 
+import logging
+logger = setup_logging("E:\Courses\Recognition\Final_Project\Pattern_Recognition_Final_Project\libs\KNN\mylog.log")
+logger.disabled = False
 def evaluate_model(y_true, y_pred, tar_names):
 
     cls_report = classification_report(y_true, y_pred, target_names=tar_names )
@@ -28,20 +33,28 @@ def train(args, cfgs):
 
     # Load feature data
     print("[INFO]: Step 1/7 - Loading features and labels]")
-    features, labels = load_features_labels(args.root, args.data_n)
+    train_features, train_labels, dev_features, dev_labels = load_features_labels(args.root, args.data_n)
     # print('features: ', features)
     # print("labels: ", labels)
     print("[INFO]: Step 2/7 - Preprocessing labels]")
-    print('features shape: ', features.shape) 
+    print('features shape: ', train_features.shape) 
     le = preprocessing.LabelEncoder()
-    labels = le.fit_transform(labels)
+    train_labels = le.fit_transform(train_labels)
     cls_n = le.classes_
     print("class: ", cls_n)
-    labels = labels[:24]
-    print('len of labels: ', len(labels))
+    train_labels = train_labels[:24] # Must to comment
+    print('len of train labels: ', len(train_labels))
     # Split data 
-    print("[INFO]: Step 3/7 - Split data with train - val : {}-{}".format( 1- cfgs.KNN.SPLIT, cfgs.KNN.SPLIT ))
-    X_train , X_val, Y_train, Y_val = train_test_split(features, labels, test_size= cfgs.KNN.SPLIT, shuffle=True)
+    print("[INFO]: Step 3/7 Split data ")
+    if dev_features == []:
+        print("[INFO]:  Split data with train - val : {}-{}".format( 1- cfgs.KNN.SPLIT, cfgs.KNN.SPLIT ))
+        X_train , X_val, Y_train, Y_val = train_test_split(train_features, train_labels, test_size= cfgs.KNN.SPLIT, shuffle=True)
+    else:
+        print("[INFO]: Loading dev path")
+        dev_labels = le.fit_transform(dev_labels)
+        X_train, Y_train = train_features, train_labels
+        X_val, Y_val = dev_features, dev_labels
+
     print("X train shape: ", X_train.shape)
     print('X val shape: ', X_val.shape) 
     print('Y train',  Y_train)
@@ -61,15 +74,16 @@ def train(args, cfgs):
     print('Y val: ', Y_val)
     print("predicted: ", predicted)
     # evaluate_model(Y_val, predicted, cls_n)
-    # print("predicted: ", le.inverse_transform(predicted))
+    # print("predicted: ", le.inverse_stransform(predicted))
     # Save model
     print("[INFO]: 6/6 - Saving model")
+    logging.info("Model was trained")
     save_path = os.path.join( args.output, 'model.pkl')
     joblib.dump(model, save_path)
 
 
 def main(args, cfgs):
-
+    write_config_args_2_log(cfgs, args, logger)
     train(args, cfgs)
 
 def arg_parser():
