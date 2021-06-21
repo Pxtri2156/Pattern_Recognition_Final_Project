@@ -71,10 +71,10 @@ def train(args, cfgs):
     predicted = model.predict(X_val)
     # Y_val = [1, 2, 7, 3, 0,4,5, 6,6]
     # predicted = [0, 0 ,0 ,0, 0, 0, 0, 1,2]
-    print('Y val: ', Y_val)
-    print("predicted: ", predicted)
+    # print('Y val: ', Y_val)
+    # print("predicted: ", predicted)
     evaluate_model(Y_val, predicted, cls_n)
-    print("predicted: ", le.inverse_stransform(predicted))
+    # print("predicted: ", le.inverse_transform(predicted))
     # Save model
     print("[INFO]: 6/6 - Saving model")
     logging.info("Model was trained")
