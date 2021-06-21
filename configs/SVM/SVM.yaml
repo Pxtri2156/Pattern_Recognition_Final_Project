@@ -1,4 +1,5 @@
 SVM:
-  KERNEL: "liner" #{‘linear’, ‘poly’, ‘rbf’, ‘sigmoid’, ‘precomputed’}
+  KERNEL: "linears" #{‘linear’, ‘poly’, ‘rbf’, ‘sigmoid’, ‘precomputed’}
   DEGREE: 3 
-  GAMMMA: 'scale' #{'auto', 'scales'}
+  GAMMA: 'scale' #{'auto', 'scales'}
+  SPLIT: 0.2
