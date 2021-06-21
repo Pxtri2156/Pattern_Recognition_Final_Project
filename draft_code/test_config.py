@@ -1,5 +1,6 @@
 import os 
-
+import yaml
+from easydict import EasyDict as edict
 from utils.config_parse import get_config
 
 
@@ -11,3 +12,6 @@ cfg.merge_from_dict(dic)
 print('config A: ', cfg.A.NAME)
 print("config B: ", cfg.AA.INFO)
 print('config dic: ', cfg.TRI)
+
+
+

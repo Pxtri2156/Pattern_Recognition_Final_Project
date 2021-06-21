@@ -1,0 +1,4 @@
+SVM:
+  KERNEL: "liner" #{‘linear’, ‘poly’, ‘rbf’, ‘sigmoid’, ‘precomputed’}
+  DEGREE: 3 
+  GAMMMA: 'scale' #{'auto', 'scales'}
