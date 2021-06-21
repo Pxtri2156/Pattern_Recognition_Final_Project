@@ -47,8 +47,8 @@ def train(args, cfgs):
     # Split data 
     print("[INFO]: Step 3/7 Split data ")
     if dev_features == []:
-        print("[INFO]:  Split data with train - val : {}-{}".format( 1- cfgs.KNN.SPLIT, cfgs.KNN.SPLIT ))
-        X_train , X_val, Y_train, Y_val = train_test_split(train_features, train_labels, test_size= cfgs.KNN.SPLIT, shuffle=True)
+        print("[INFO]:  Split data with train - val : {}-{}".format( 1- cfgs.SVM.SPLIT, cfgs.SVM.SPLIT ))
+        X_train , X_val, Y_train, Y_val = train_test_split(train_features, train_labels, test_size= cfgs.SVM.SPLIT, shuffle=True)
     else:
         print("[INFO]: Loading dev path")
         dev_labels = le.fit_transform(dev_labels)
@@ -61,7 +61,7 @@ def train(args, cfgs):
     print("Y train shape: ", len(Y_train))
     print("Y val: " , len(Y_val))
     # Define model
-    print("[INFO]: Step 4/7 Define model KNeighborsClassifier ")
+    print("[INFO]: Step 4/7 Define model SVM ")
     model = svm.SVC(kernel = cfgs.SVM.KERNEL, degree=cfgs.SVM.DEGREE)
     # Training
     print("[INFO]: Step 5/7 - Training ")
@@ -116,8 +116,10 @@ def print_args_cfg(args, cfgs):
     print("{} The path of configs file : \n\t{}".format('#'*3, args.configs_file))
 
     print("{} CONFIGS {}".format('_'*30, "_"*30))
-    print("{} Split dataset train - val : {}-{}".format('#'*3, 1- cfgs.KNN.SPLIT, cfgs.KNN.SPLIT ))
-    print("{} Number neighbor: {}".format('#'*3, cfgs.KNN.K))
+    print("{} Kernel : {}".format('#'*3, cfgs.SVM.KERNEL))
+    print("{} Degree: {}".format('#'*3, cfgs.SVM.KERNEL))
+    print("{} Gamma: {}".format('#'*3, cfgs.SVM.GAMMA))
+
     print("{}\n".format('_'*100))
 
 
