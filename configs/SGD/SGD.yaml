@@ -1,0 +1,4 @@
+SGD:
+  SPLIT: 0.2
+  LOSS: 'log' # [ ‘hinge’, ‘log’, ‘modified_huber’, ‘squared_hinge’, ‘perceptron’,]
+  PENALTY: 'l2'
