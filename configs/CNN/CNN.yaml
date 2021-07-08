@@ -1,0 +1,2 @@
+CNN:
+   SPLIT: 0.2 # It is mean train:test 8:2
