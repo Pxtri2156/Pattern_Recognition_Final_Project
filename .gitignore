@@ -14,4 +14,5 @@ E:\Courses\Recognition\Final_Project\Pattern_Recognition_Final_Project\datasets\
 E:\Courses\Recognition\Final_Project\Pattern_Recognition_Final_Project\log_filename.log
 
 # __pycache__
-*\__pycache__
+*__pycache__
+*.vscode
