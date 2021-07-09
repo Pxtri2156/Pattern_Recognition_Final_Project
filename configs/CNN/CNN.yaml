@@ -1,2 +1,23 @@
 CNN:
+   MODEL:
+      INPUT_SIZE: 216
+      OUTPUT_SIZE: 6 # 6 label 
+      ACTIVATION: 'relu' # activation function
+      PADDING: 'same'
+      LEARNING_RATE: 0.00001
+      DE_CAY: 1e-6
+      LOSS_FUNCTION: 'categorical_crossentropy'
+      METRIC: 'accuracy'
+      BATCH_SIZE: 16
+      EPOCHS: 10
    SPLIT: 0.2 # It is mean train:test 8:2
+   ROOT: "./"
+   DATASET_NAME: "all"
+   ARGUMENT: False
+   FEATURES: "all"
+   CONFIG_FILE: "./configs/CNN/CNN.yaml"
+   WEIGHTS_PATH: "./models/CNN/model.h5"
+   ARCHITECTURE_MODEL_PATH: './models/CNN/model.json'
+   VISUALIZE_PATH: './models/CNN/loss_log.png'
+
+
