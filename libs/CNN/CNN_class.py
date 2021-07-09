@@ -76,20 +76,24 @@ class CNN:
         model.add(Activation('softmax'))
         self.model = model
 
-    def print_architecture_model():
+    def print_architecture_model(self):
         self.model.summary()
 
     def train(self,x_traincnn, x_testcnn, y_train, y_test):
-        assert(size(x_traincnn.shape) == 3 ), "x_traincnn must be tensor (dimenson = 3)"
-        assert(size(x_testcnn.shape) == 3 ), "x_testcnn must be tensor (dimenson = 3)"
+        assert(len(x_traincnn.shape) == 3 ), "x_traincnn must be tensor (dimenson = 3)"
+        assert(len(x_testcnn.shape) == 3 ), "x_testcnn must be tensor (dimenson = 3)"
         
         # set optimize 
-        opt = tensorflow.keras.optimizers.RMSprop(lr=0.00001, decay=1e-6)
+        opt = tensorflow.keras.optimizers.RMSprop(learning_rate=0.00001, decay=1e-6)
         self.model.compile(loss='categorical_crossentropy', optimizer=opt,metrics=['accuracy'])
-        self.log_train = self.model.self.model.fit(x_traincnn, y_train, batch_size=self.batch_size, epochs=self.epochs, validation_data=(x_testcnn, y_test))
+        self.log_train = self.model.fit(x_traincnn, y_train, batch_size=self.batch_size, epochs=self.epochs, validation_data=(x_testcnn, y_test))
         
-    def predict(self):
-        pass
+    def predict(self, x_tess):
+        preds = self.model.predict(x_tess, 
+                         batch_size=self.batch_size, 
+                         verbose=1)
+        preds = preds.argmax(axis=1) 
+        return preds
     
     def plot_log(self, plot_file):
         plt.plot(self.log_train.history['loss'])

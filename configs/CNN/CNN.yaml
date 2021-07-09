@@ -9,7 +9,7 @@ CNN:
       LOSS_FUNCTION: 'categorical_crossentropy'
       METRIC: 'accuracy'
       BATCH_SIZE: 16
-      EPOCHS: 10
+      EPOCHS: 700
    SPLIT: 0.2 # It is mean train:test 8:2
    ROOT: "./"
    DATASET_NAME: "all"
@@ -18,6 +18,9 @@ CNN:
    CONFIG_FILE: "./configs/CNN/CNN.yaml"
    WEIGHTS_PATH: "./models/CNN/model.h5"
    ARCHITECTURE_MODEL_PATH: './models/CNN/model.json'
-   VISUALIZE_PATH: './models/CNN/loss_log.png'
+   VISUALIZE_LOSS_PATH: './models/CNN/loss_log.png'
+   OUTPUT_PATH: "./output"
+   DISABLE_LOG: True
+   LOG_PATH: "./log.log"
 
 
