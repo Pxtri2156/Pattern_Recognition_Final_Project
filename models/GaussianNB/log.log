@@ -1,0 +1,8 @@
+ARGUMENT 
+### The path root of exacted features: E:\Courses\Recognition\Final_Project\Pattern_Recognition_Final_Project\feature_data
+### Dataset name to train: TESS
+### The methods exacted feature: all
+### Augment data: False
+### Dataset name to train: TESS
+### The path of model ouput : E:\Courses\Recognition\Final_Project\Pattern_Recognition_Final_Project\models\GaussianNB
+### The path of configs file : E:\Courses\Recognition\Final_Project\Pattern_Recognition_Final_Project\configs\GaussianNB\GaussianNB.yaml
