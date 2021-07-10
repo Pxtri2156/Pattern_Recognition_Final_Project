@@ -143,5 +143,5 @@ if __name__ == "__main__":
     -o E:\Courses\Recognition\Final_Project\Pattern_Recognition_Final_Project\libs\KNN  \
     -c E:\Courses\Recognition\Final_Project\Pattern_Recognition_Final_Project\configs\KNN\KNN.yaml
 
--r E:\Courses\Recognition\Final_Project\Pattern_Recognition_Final_Project\feature_data -n TESS -o E:\Courses\Recognition\Final_Project\Pattern_Recognition_Final_Project\models\KNN  -c E:\Courses\Recognition\Final_Project\Pattern_Recognition_Final_Project\configs\KNN\KNN.yaml
+-r E:\Courses\Recognition\Final_Project\Pattern_Recognition_Final_Project\feature_data -n TESS -o E:\Courses\Recognition\Final_Project\Pattern_Recognition_Final_Project\models\KNN  -c E:\Courses\Recognition\Final_Project\Pattern_Recognition_Final_Project\configs\CNN\CNN.yaml
 '''

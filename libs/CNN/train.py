@@ -225,5 +225,6 @@ if __name__ == "__main__":
     -c E:\Courses\Recognition\Final_Project\Pattern_Recognition_Final_Project\configs\CNN\CNN.yaml
 
 -r E:\Courses\Recognition\Final_Project\Pattern_Recognition_Final_Project\feature_data -n TESS -o E:\Courses\Recognition\Final_Project\Pattern_Recognition_Final_Project\models\CNN  -c E:\Courses\Recognition\Final_Project\Pattern_Recognition_Final_Project\configs\CNN\CNN.yaml
+
 '''
 
