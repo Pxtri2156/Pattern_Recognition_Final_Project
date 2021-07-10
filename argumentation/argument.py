@@ -21,10 +21,15 @@ def save_audio(output, argument_data):
     ## Save argument data
     pass
 
+
 # taking any example and checking for techniques.
 def main():
-    path = np.array(data_path.Path)[1]
-    data, sample_rate = librosa.load(path)
+    # path = np.array(data_path.Path)[1]
+    path = "E:/Courses/Recognition/Final_Project/Dataset/CREM/1001_DFA_ANG_XX.wav"
+    data, sample_rate = librosa.load(path,duration=2.5, offset=0.6 )
+    print("Shape data before: ", data.shape)
+    noise_data = noise(data)
+    print("Shape noise data: ", noise_data.shape)
 
 if __name__ == "__main__":
     main()
