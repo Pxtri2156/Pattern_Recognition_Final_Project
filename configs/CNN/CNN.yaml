@@ -9,7 +9,7 @@ CNN:
       LOSS_FUNCTION: 'categorical_crossentropy'
       METRIC: 'accuracy'
       BATCH_SIZE: 32
-      EPOCHS: 5
+      EPOCHS: 700
    SPLIT: 0.2 # It is mean train:test 8:2
    ROOT: "./"
    DATASET_NAME: "all"
