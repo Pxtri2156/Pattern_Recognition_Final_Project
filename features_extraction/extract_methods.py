@@ -32,6 +32,14 @@ def m_mfcc(data, sample_rate):
     # print("after: ", mfcc )
     return mfcc  
 
+def custom_mfcc(data, sr, n_mfcc=13):
+    mfccs = np.mean(librosa.feature.mfcc(y=data, sr=sr, n_mfcc=n_mfcc), axis = 0)
+    if mfccs.shape[0] < 216:
+        fix_size = 216 - mfccs.shape[0]
+        zeros_array = np.zeros((fix_size,))
+        mfccs = np.concatenate((mfccs, zeros_array), axis=0)
+    return mfccs
+
 def  m_rms(data):
     # Root Mean Square Value. \
     rms = np.mean(librosa.feature.rms(y=data).T, axis=0)
