@@ -5,6 +5,7 @@ import numpy as np
 import sys
 import joblib
 import json
+import matplotlib.pyplot as plt
 from tqdm import tqdm
 
 from sklearn.model_selection import train_test_split
@@ -95,14 +96,14 @@ class CNN:
         preds = preds.argmax(axis=1) 
         return preds
     
-    def plot_log(self, plot_file):
+    def plot_loss(self, plot_file):
         plt.plot(self.log_train.history['loss'])
         plt.plot(self.log_train.history['val_loss'])
         plt.title('model loss')
         plt.ylabel('loss')
         plt.xlabel('epoch')
         plt.legend(['train', 'test'], loc='upper left')
-        plt.show()
+        plt.savefig(plot_file)
     
     def save_architecture_model(self, json_path):
         model_json = self.model.to_json()

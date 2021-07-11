@@ -119,6 +119,9 @@ def train(cfgs):
     model.save_weight_model(cfgs.CNN.WEIGHTS_PATH)
     print("Saved model at {} ".format(cfgs.CNN.WEIGHTS_PATH))
     logging.info("Saved model at {} ".format(cfgs.CNN.WEIGHTS_PATH))
+    if cfgs.CNN.VISUALIZE_LOSS_PATH != "":
+      model.plot_loss(cfgs.CNN.VISUALIZE_LOSS_PATH)
+      print("Visualized loss at {}".format(cfgs.CNN.VISUALIZE_LOSS_PATH))
 
 
 def main(cfgs):
