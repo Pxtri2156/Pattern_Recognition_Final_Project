@@ -55,8 +55,8 @@ def main():
     path = "D:/Pattern_Recognition/URDU-Dataset-master/Neutral/SF9_F3_N03.wav"
     data, sample_rate = librosa.load(path,duration=2.5, offset=0.6 )
     print("Shape data before: ", data.shape)
-    noise_data = vtlp(data, sample_rate)
-    print("Shape noise data: ", noise_data.shape)
+    noise_dataa = vtlp(data, sample_rate)
+    print("Shape noise data: ", noise_dataa.shape)
 
 if __name__ == "__main__":
     main()
