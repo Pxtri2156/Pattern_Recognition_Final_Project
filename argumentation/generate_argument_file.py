@@ -38,12 +38,14 @@ def argument_data(data, sr, argument, output, id):
         argumentation_data = normalize(data)
     elif argument == "polarity_inversion":
         argumentation_data = polarity_inversion(data)
+    else:
+      print("Wrong argument")
   
     name_file = argument + "_" + str(id) + ".wav"
     save_path = os.path.join(output, name_file)
     # print('save path: ', save_path)
     sf.write(save_path, argumentation_data, sr, "PCM_24")
-    print("Saved at {}".format(save_path))
+    # print("Saved at {}".format(save_path))
 def read_json(path):
   fi = open(path)
   path_dic = json.load(fi)
@@ -58,10 +60,14 @@ def generate_one_label(path_list, argument_list, label, output_root):
     id = 0
     for path in tqdm(path_list):
         print("[INFO] Label: {}, id: {} \n\tpath: {}".format(label, id, path))
-        data, sr =  librosa.load(path,duration=2.5, offset=0.6 )
-        for argument in argument_list:
-            argument_data(data, sr, argument, output, id)
-        id += 1
+        try:
+          data, sr =  librosa.load(path,duration=2.5, offset=0.6 )
+          for argument in argument_list:
+              argument_data(data, sr, argument, output, id)
+          print("Saved")
+          id += 1
+        except:
+          print("Skip file {}".format(path))
 
 def generate_all_label(input_path ,argument_list, output_root):
     path_dic = read_json(input_path)
