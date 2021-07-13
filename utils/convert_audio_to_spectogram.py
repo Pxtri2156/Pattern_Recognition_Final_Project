@@ -7,6 +7,7 @@ import librosa
 import librosa.display
 from tqdm import tqdm
 import soundfile as sf
+from clear_screen import clear
 
 def convert_audio_to_spectogram_img(input_path, output_path):
     # data, sr = librosa.load(input_path, sr=44100)
@@ -17,6 +18,7 @@ def convert_audio_to_spectogram_img(input_path, output_path):
     librosa.display.specshow(Xdb, sr=sr, x_axis='time', y_axis='log')
     plt.savefig(output_path)
     del(data)
+    del(sr)
     del(X)
     del(Xdb)
     print("Saved image at {}".format(output_path))
@@ -24,16 +26,22 @@ def convert_audio_to_spectogram_img(input_path, output_path):
 def convert_all_audio(input_root, output_root, start, end):
     # df = pd.DataFrame(data=os.listdir(input_root),columns=['name_file'])
     # df.to_csv("link.csv", index=False)
-    link_file = pd.read_csv("/content/Pattern_Recognition_Final_Project/datasets/IEMOCAP/link.csv")
-    
+    link_file = pd.read_csv("/content/data_aug.csv")
+    stt = 0
     if end > len(link_file):
       end = len(link_file) + 1
-    for file_name in tqdm(link_file["name_file"][start:end]):
+    for file_name in tqdm(link_file["image_id"][start:end]):
       # file_name = "Ses02F_impro06_M005_neu.wav"
       print("Processing {}".format(file_name))
       input_path = os.path.join(input_root,file_name)
       output_path = os.path.join(output_root,file_name.split(".")[0] + ".png" )
       convert_audio_to_spectogram_img(input_path,output_path )
+      del(input_path)
+      del(output_path)
+      del(file_name)
+      stt += 1
+      if stt % 100 == 0:
+        clear()
     print("Done:")
 def main(args):
     convert_all_audio(args.root_input, args.root_output, args.start,args.end) 
