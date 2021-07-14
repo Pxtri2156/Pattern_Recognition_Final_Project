@@ -12,16 +12,21 @@ from clear_screen import clear
 def convert_audio_to_spectogram_img(input_path, output_path):
     # data, sr = librosa.load(input_path, sr=44100)
     data, sr = sf.read(input_path)
-    X = librosa.stft(data)
-    Xdb = librosa.amplitude_to_db(abs(X))
-    plt.figure(figsize=(14, 5))
-    librosa.display.specshow(Xdb, sr=sr, x_axis='time', y_axis='log')
-    plt.savefig(output_path)
-    del(data)
-    del(sr)
-    del(X)
-    del(Xdb)
-    print("Saved image at {}".format(output_path))
+    try:
+      X = librosa.stft(data)
+      Xdb = librosa.amplitude_to_db(abs(X))
+    
+      plt.figure(figsize=(14, 5))
+      librosa.display.specshow(Xdb, sr=sr, x_axis='time', y_axis='log')
+      plt.savefig(output_path)
+      del(data)
+      del(sr)
+      del(X)
+      del(Xdb)
+      print("Saved image at {}".format(output_path))
+      return 0
+    except librosa.util.exceptions.ParameterError:
+      return 1
 
 def convert_all_audio(input_root, output_root, start, end):
     # df = pd.DataFrame(data=os.listdir(input_root),columns=['name_file'])
@@ -35,13 +40,11 @@ def convert_all_audio(input_root, output_root, start, end):
       print("Processing {}".format(file_name))
       input_path = os.path.join(input_root,file_name)
       output_path = os.path.join(output_root,file_name.split(".")[0] + ".png" )
-      convert_audio_to_spectogram_img(input_path,output_path )
+      stt += convert_audio_to_spectogram_img(input_path,output_path)
       del(input_path)
       del(output_path)
       del(file_name)
-      stt += 1
-      if stt % 100 == 0:
-        clear()
+    print("[INFO] stt fail : ", stt)
     print("Done:")
 def main(args):
     convert_all_audio(args.root_input, args.root_output, args.start,args.end) 
