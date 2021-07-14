@@ -2,6 +2,8 @@ import librosa
 import argparse
 import numpy as np 
 import sys 
+import soundfile as sf
+
 from tqdm import tqdm
 sys.path.append("./")
 from features_extraction.extract_methods import m_mfcc, m_zcr, m_spectral_rolloff, \
@@ -68,6 +70,13 @@ def extract_all_features(data, sample_rate):
 
     # Return vector 
     return result
+def get_feature_single_path_argument_data(path):
+    data, sr = sf.read(path)
+    features = extract_all_features(data, sr)
+    print("shape of features: ", features.shape)
+    # Return result
+    return features
+      
 
 def get_feature_from_single_path_with_mfcc(path, argument=False):
     # Generate data path 
@@ -125,7 +134,7 @@ def get_feature_from_single_path(path, argument=False):
     # Return result
     return features
 
-def get_features_from_multi_paths(paths, type_method, argument=False):
+def get_features_from_multi_paths(paths, type_method, data_name, argument=False):
     all_features = np.array([])
     # dem = 0
     errors_index = []
@@ -136,11 +145,14 @@ def get_features_from_multi_paths(paths, type_method, argument=False):
         # dem += 1
         
         # try:
-        if type_method == "all":
-          feature = get_feature_from_single_path(paths[i], argument)
-        elif type_method == "MFCC":
-          print("Use MFCC")
-          feature = get_feature_from_single_path_with_mfcc(paths[i], argument)
+        if data_name == "argument_data":
+          feature = get_feature_single_path_argument_data(paths[i])
+        else:
+          if type_method == "all":
+            feature = get_feature_from_single_path(paths[i], argument)
+          elif type_method == "MFCC":
+            print("Use MFCC")
+            feature = get_feature_from_single_path_with_mfcc(paths[i], argument)
         # except:
         #   print("Except ")
         #   errors_index.append(i)
@@ -175,7 +187,7 @@ def get_all_features(root_data, data_n, type_method, argument=False):
         label_lst = np.repeat(label_lst,4)
 
     # Get features from paths list
-    all_features, errors_index = get_features_from_multi_paths(path_lst, type_method, argument)
+    all_features, errors_index = get_features_from_multi_paths(path_lst, type_method,data_n, argument)
     label_lst = filter_wrong_features(errors_index,label_lst, argument )
     print('all features shape: ', all_features.shape)
     print("all label_lst shape: ", len(label_lst))

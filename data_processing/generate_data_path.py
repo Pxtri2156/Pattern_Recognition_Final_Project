@@ -4,6 +4,9 @@ import numpy as np
 from tqdm import tqdm
 import sys 
 import glob
+import json 
+import random
+
 sys.path.append("./")
 # from config import TYPE_DS1, TYPE_DS2
 
@@ -67,6 +70,27 @@ def generate_meld(data_path):
     print("Done")
     return path_lst, emotion_lst
 
+def generate_argument_data(input_path):
+    # input_path = os.path.join(input_path, "*.json")
+    path_lst = []
+    emotion_lst = []
+    npy_lst = glob.glob(input_path + "/*.json")
+    for json_path in npy_lst:
+      print('json path: ', json_path)
+      fi = open(json_path, 'r')
+      data = json.load(fi)
+      for key in data.keys():
+          for path in data[key]:
+              path_lst.append(path)
+      
+      random.shuffle(path_lst)
+      for i, path in enumerate(path_lst):
+          label = path.split("/")[0]
+          emotion_lst.append(label)
+          path_lst[i] =  "/content/data/" + path
+      break 
+    return path_lst, emotion_lst
+
 def generate_iemocap(npy_path):
     print("Preprocessing IEMOCAP")
     path_lst = []
@@ -110,6 +134,8 @@ def generate_data_path(root_path, nameDB):
         path_lst, emotion_lst = generate_urdu(path_data)
     elif nameDB == "CREM":
         path_lst, emotion_lst = generate_crem(path_data)
+    elif nameDB == "Argument_data":
+        path_lst, emotion_lst = generate_argument_data(path_data)
     else:
        assert(False),"Wrong name dataset !!!"
 
