@@ -144,19 +144,19 @@ def get_features_from_multi_paths(paths, type_method, data_name, argument=False)
         #     break
         # dem += 1
         
-        # try:
-        if data_name == "argument_data":
-          feature = get_feature_single_path_argument_data(paths[i])
-        else:
-          if type_method == "all":
-            feature = get_feature_from_single_path(paths[i], argument)
-          elif type_method == "MFCC":
-            print("Use MFCC")
-            feature = get_feature_from_single_path_with_mfcc(paths[i], argument)
-        # except:
-        #   print("Except ")
-        #   errors_index.append(i)
-        #   continue
+        try:
+          if data_name == "argument_data":
+            feature = get_feature_single_path_argument_data(paths[i])
+          else:
+            if type_method == "all":
+              feature = get_feature_from_single_path(paths[i], argument)
+            elif type_method == "MFCC":
+              print("Use MFCC")
+              feature = get_feature_from_single_path_with_mfcc(paths[i], argument)
+        except:
+          print("Except ")
+          errors_index.append(i)
+          continue
         if i != 0:
             all_features = np.vstack((all_features, feature))
         else:
