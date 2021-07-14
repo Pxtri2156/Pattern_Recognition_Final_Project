@@ -78,12 +78,7 @@ def generate_argument_data(input_path):
     for json_path in npy_lst:
       print('json path: ', json_path)
       fi = open(json_path, 'r')
-      data = json.load(fi)
-      for key in data.keys():
-          for path in data[key]:
-              path_lst.append(path)
-      
-      random.shuffle(path_lst)
+      path_lst = json.load(fi)
       for i, path in enumerate(path_lst):
           label = path.split("/")[0]
           emotion_lst.append(label)
