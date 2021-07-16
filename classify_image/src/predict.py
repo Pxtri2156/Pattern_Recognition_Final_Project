@@ -47,21 +47,32 @@ def inference_one_epoch(model, data_loader, device):
     return image_preds_all
 
 
-def run_infer():
+def run_infer(root, name_model, image_path):
     # device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    convert_audio_to_spectogram_img()
+    # convert_audio_to_spectogram_img()
     device = torch.device('cpu')
     n_classes = 6
     
     tst_preds = []
 
-    TEST_DIR = 'test'
+    TEST_DIR = image_path.split('/')[0]
     test = pd.DataFrame()
     
-    test['image_id'] = ['image_test.png']
-    model_arch = 'resnet50'
+    test['image_id'] = ['tmp.png']
+    
+    if "resnet" in name_model: 
+        model_arch = 'resnet50'
+    elif "vit" in name_model:
+        model_arch = 'vit_small_patch32_384'
+    elif "nfnet" in name_model:
+        model_arch = 'nfnet_f0'
+    elif 'effb4' in name_model:
+        model_arch = 'tf_efficientnet_b4_ns'
+        
     if "vit" in model_arch:
         testset = ICDARDataset(test, TEST_DIR, transforms=get_inference_transforms(384))
+    elif 'nfne' in model_arch:
+        testset = ICDARDataset(test, TEST_DIR, transforms=get_inference_transforms(192))
     else:
         testset = ICDARDataset(test, TEST_DIR, transforms=get_inference_transforms(224))
         
@@ -74,7 +85,7 @@ def run_infer():
         pin_memory=False)
 
     model = Classifier(model_arch, n_classes).to(device)
-    model_path = '/content/drive/MyDrive/Emotion_Speech_Recognition/Models/Classify_image/resnet/best.pt'
+    model_path = os.path.join(root, name_model, 'best.pt')
     model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu'))['model'])
     
     with torch.no_grad():
@@ -94,11 +105,11 @@ def run_infer():
     # print(result)
     metrics = {
             "classifier":result,
-            "spectrum" : "test/image_test.png"
+            "spectrum" : image_path
         }
     torch.cuda.empty_cache()
     return metrics
 
 
 if __name__ == "__main__":
-    run_infer()
+     metrics = run_infer(root, name_model, image_path)
