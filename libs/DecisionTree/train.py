@@ -49,8 +49,8 @@ def train(args, cfgs):
     # Split data 
     print("[INFO]: Step 3/7 Split data ")
     if dev_features == []:
-        print("[INFO]:  Split data with train - val : {}-{}".format( 1- cfgs.GAUSSIAN.SPLIT, cfgs.GAUSSIAN.SPLIT ))
-        X_train , X_val, Y_train, Y_val = train_test_split(train_features, train_labels, test_size= cfgs.GAUSSIAN.SPLIT, shuffle=True)
+        print("[INFO]:  Split data with train - val : {}-{}".format( 1- cfgs.DS.SPLIT, cfgs.DS.SPLIT ))
+        X_train , X_val, Y_train, Y_val = train_test_split(train_features, train_labels, test_size= cfgs.DS.SPLIT, shuffle=True)
     else:
         print("[INFO]: Loading dev path")
         dev_labels = le.fit_transform(dev_labels)
@@ -118,7 +118,7 @@ def print_args_cfg(args, cfgs):
     print("{} The path of configs file : \n\t{}".format('#'*3, args.configs_file))
 
     print("{} CONFIGS {}".format('_'*30, "_"*30))
-    print("{} Split dataset train - val : {}-{}".format('#'*3, 1- cfgs.GAUSSIAN.SPLIT, cfgs.GAUSSIAN.SPLIT ))
+    print("{} Split dataset train - val : {}-{}".format('#'*3, 1- cfgs.DS.SPLIT, cfgs.DS.SPLIT ))
     print("{}\n".format('_'*100))
 
 
