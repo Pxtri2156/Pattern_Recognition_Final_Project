@@ -8,9 +8,9 @@ import torch
 from torch.utils.data import Dataset, DataLoader
 
 from utils import *
-from augmentations import *
-from models import Classifier
-from datasets import ICDARDataset
+from classify_image.src.augmentations import *
+from classify_image.src.models import Classifier
+from classify_image.src.datasets import ICDARDataset
 
 import matplotlib.pyplot as plt
 import librosa
@@ -58,7 +58,7 @@ def run_infer(root, name_model, image_path):
     TEST_DIR = image_path.split('/')[0]
     test = pd.DataFrame()
     
-    test['image_id'] = ['tmp.png']
+    test['image_id'] = [image_path.split('/')[-1]]
     
     if "resnet" in name_model: 
         model_arch = 'resnet50'
@@ -102,7 +102,7 @@ def run_infer(root, name_model, image_path):
     result = []
     for i in pred:
       result.append(round(i*100/s,2))
-    # print(result)
+    print(result)
     metrics = {
             "classifier":result,
             "spectrum" : image_path

@@ -9,6 +9,7 @@ import os
 import sys
 sys.path.append('../')
 from utils.test_demo import print_name
+from classify_image.src.predict import run_infer
 
 # from flask_cors import CORS
 def save_audio(file):
@@ -49,16 +50,30 @@ def index():
     return t, 200
 
 def generate_spectogram_img(audio_path):
+    q_id = datetime.timestamp(datetime.now())
     print("audio path: ", audio_path)
     data, sample_rate = librosa.load(audio_path,duration=2.5, offset=0.6 )
     X = librosa.stft(data)
     Xdb = librosa.amplitude_to_db(abs(X))
     plt.figure(figsize=(14, 5))
     librosa.display.specshow(Xdb, sr=sample_rate, x_axis='time', y_axis='log')
-    save_path = "spectrum/tmp.png"
+    save_path = f"spectrum/tmp_{q_id}.png"
+
+    if os.path.isfile(save_path):
+        os.remove(save_path)
+        print("removed")
     plt.savefig(save_path)
     print("Saved at {}".format(save_path))
     return save_path
+
+def predict(type, method, img_path, audio_path):
+    root = "E:\Courses\Recognition\Final_Project\Models\classify_image\Classify_image"
+    metrics = None
+    if type == "image":
+        metrics = run_infer(root, method, img_path)
+    else:
+        pass
+    return metrics
 
 @app.route('/api/recognize',methods=['POST'])
 def recognize():
@@ -68,13 +83,13 @@ def recognize():
         # Gọi hàm lưu ảnh quang phổ vào spectrum 
         audio_path = save_audio(audio_file)
         img_path = generate_spectogram_img(audio_path)
-        print_name()
-        print('request form' , request.form)
-        print("type: ", request.form['type'])
-        metrics = {
-            "classifier":[40,40,40,40,40,40],
-            "spectrum" : img_path
-        }
+        metrics = predict( request.form['type'],  request.form['model'],img_path, audio_path )
+        # print('request form' , request.form)
+        # print("type: ", request.form['type'])
+        # metrics = {
+        #     "classifier":[40,40,40,40,40,40],
+        #     "spectrum" : img_path
+        # }
         #
         # predict function, return type metrics
         #

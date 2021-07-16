@@ -3,7 +3,7 @@ import os
 import torch
 from torch.utils.data import Dataset
 
-from utils import get_img
+from classify_image.src.utils import get_img
 
 class ICDARDataset(Dataset):
     def __init__(self, df, image_root, transforms=None):
