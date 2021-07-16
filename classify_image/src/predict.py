@@ -112,4 +112,4 @@ def run_infer(root, name_model, image_path):
 
 
 if __name__ == "__main__":
-    run_infer(root, name_model, image_path)
+     metrics = run_infer(root, name_model, image_path)
