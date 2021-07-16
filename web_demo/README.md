@@ -1,11 +1,12 @@
-# Nhan dang
+# Speech emotion recognition
 - Setup environment
 ```shell
 $ virtualenv venv
 % .\venv\Scripts\activate.bat
-$ pip install -r requirements.txt --no-index
+$ pip install -r requirements.txt 
 ```
 
 ```shell
-$ python3 app.py
+$ python app.py
 ```
+*Note: all script run on windows*
